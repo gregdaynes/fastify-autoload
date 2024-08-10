@@ -56,7 +56,7 @@ async function loadPlugins ({ pluginTree, options, opts, fastify }) {
         })
     }))
 
-    registerNode(node, fastify)
+    registerNode(node, fastify, opts)
   }
 }
 
@@ -125,7 +125,7 @@ async function loadHook (hook, options) {
   return hookContent
 }
 
-function registerNode (node, fastify) {
+function registerNode (node, fastify, opts) {
   if (node.hooks.length === 0) {
     registerAllPlugins(fastify, node)
   } else {
@@ -134,7 +134,7 @@ function registerNode (node, fastify) {
       for (const hookFile of node.hooks) {
         const hookPlugin = node.hooksMeta[hookFile.file]
         // encapsulate hooks at plugin level
-        app.register(hookPlugin)
+        app.register(hookPlugin, opts.options)
       }
 
       registerAllPlugins(app, node)
